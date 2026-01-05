@@ -553,6 +553,20 @@ namespace Nodify
             FillRule = FillRule.EvenOdd
         };
 
+        // Geometry caching heuristic:
+        // 0: Invalid (any reason)
+        // 1: Invalidated by MeasureOverride
+        // --
+        // 2: Valid until the next call to MeasureOverride, not yet used by OnRender
+        // 3: Valid, update triggered by MeasureOverride, not yet used by OnRender
+        // 4: Valid, already used by OnRender
+        // Do note that this can still be improved, as we still regenerate geometries more than necessary.
+        // From a quick test using the playground benchmark, there were about 59,4% of calls that can return a cached geometry.
+        // A further improvement would be to remove the OnRender heuristic and properly track properties which can actually change the geometry.
+        // Example of a scenario currently triggering an unnecessary update:
+        // A connection hovered in the playground will change its OutlineBrush, which will call OnRender and then invalidate the geometry.
+        private int _geometryCacheStatus;
+
         private ConnectionContainer? _container;
         private ConnectionContainer? Container => _container ??= this.GetParentOfType<ConnectionContainer>();
 
@@ -560,36 +574,41 @@ namespace Nodify
         {
             get
             {
-                using (StreamGeometryContext context = _geometry.Open())
+                if (_geometryCacheStatus <= 1)
                 {
-                    (Vector sourceOffset, Vector targetOffset) = GetOffset();
-                    var (arrowStart, arrowEnd) = DrawLineGeometry(context, Source + sourceOffset, Target + targetOffset);
-
-                    if (ArrowSize.Width != 0d && ArrowSize.Height != 0d)
+                    using (StreamGeometryContext context = _geometry.Open())
                     {
-                        var reverseDirection = Direction == ConnectionDirection.Forward ? ConnectionDirection.Backward : ConnectionDirection.Forward;
-                        switch (ArrowEnds)
-                        {
-                            case ArrowHeadEnds.Start:
-                                DrawArrowGeometry(context, arrowStart.ArrowStartSource, arrowStart.ArrowStartTarget, reverseDirection, ArrowShape, SourceOrientation);
-                                break;
-                            case ArrowHeadEnds.End:
-                                DrawArrowGeometry(context, arrowEnd.ArrowEndSource, arrowEnd.ArrowEndTarget, Direction, ArrowShape, TargetOrientation);
-                                break;
-                            case ArrowHeadEnds.Both:
-                                DrawArrowGeometry(context, arrowEnd.ArrowEndSource, arrowEnd.ArrowEndTarget, Direction, ArrowShape, TargetOrientation);
-                                DrawArrowGeometry(context, arrowStart.ArrowStartSource, arrowStart.ArrowStartTarget, reverseDirection, ArrowShape, SourceOrientation);
-                                break;
-                            case ArrowHeadEnds.None:
-                            default:
-                                break;
-                        }
+                        (Vector sourceOffset, Vector targetOffset) = GetOffset();
+                        var (arrowStart, arrowEnd) = DrawLineGeometry(context, Source + sourceOffset, Target + targetOffset);
 
-                        if (DirectionalArrowsCount > 0)
+                        if (ArrowSize.Width != 0d && ArrowSize.Height != 0d)
                         {
-                            DrawDirectionalArrowsGeometry(context, Source + sourceOffset, Target + targetOffset);
+                            var reverseDirection = Direction == ConnectionDirection.Forward ? ConnectionDirection.Backward : ConnectionDirection.Forward;
+                            switch (ArrowEnds)
+                            {
+                                case ArrowHeadEnds.Start:
+                                    DrawArrowGeometry(context, arrowStart.ArrowStartSource, arrowStart.ArrowStartTarget, reverseDirection, ArrowShape, SourceOrientation);
+                                    break;
+                                case ArrowHeadEnds.End:
+                                    DrawArrowGeometry(context, arrowEnd.ArrowEndSource, arrowEnd.ArrowEndTarget, Direction, ArrowShape, TargetOrientation);
+                                    break;
+                                case ArrowHeadEnds.Both:
+                                    DrawArrowGeometry(context, arrowEnd.ArrowEndSource, arrowEnd.ArrowEndTarget, Direction, ArrowShape, TargetOrientation);
+                                    DrawArrowGeometry(context, arrowStart.ArrowStartSource, arrowStart.ArrowStartTarget, reverseDirection, ArrowShape, SourceOrientation);
+                                    break;
+                                case ArrowHeadEnds.None:
+                                default:
+                                    break;
+                            }
+
+                            if (DirectionalArrowsCount > 0)
+                            {
+                                DrawDirectionalArrowsGeometry(context, Source + sourceOffset, Target + targetOffset);
+                            }
                         }
                     }
+
+                    _geometryCacheStatus += 2;
                 }
 
                 return _geometry;
@@ -957,8 +976,22 @@ namespace Nodify
             return _outlinePen ??= new Pen(OutlineBrush, StrokeThickness + OutlineThickness * 2d);
         }
 
+        protected override Size MeasureOverride(Size constraint)
+        {
+            // We always want to update the geometry when MeasureOverride is called.
+            // The base implementation will actually call the internal method CacheDefiningGeometry() here,
+            // which we sadly can't override. However, we can mimick the logic.
+            _geometryCacheStatus = 1;
+            return base.MeasureOverride(constraint);
+        }
+
         protected override void OnRender(DrawingContext drawingContext)
         {
+            // Properties declared with AffectsRender should trigger calls to the OnRender method without
+            // going though the arrange/measure logic, so we want to consider two consecutive calls as a hint
+            // that the geometry needs to be recalculated.
+            if (_geometryCacheStatus == 4) _geometryCacheStatus = 0;
+
             if (OutlineBrush != null)
             {
                 drawingContext.DrawGeometry(OutlineBrush, GetOutlinePen(), DefiningGeometry);
@@ -975,6 +1008,8 @@ namespace Nodify
                 (Vector sourceOffset, Vector targetOffset) = GetOffset();
                 drawingContext.DrawText(text, GetTextPosition(text, Source + sourceOffset, Target + targetOffset));
             }
+
+            _geometryCacheStatus = 4;
         }
 
         internal void UpdateFocusVisual()
