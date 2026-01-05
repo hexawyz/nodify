@@ -113,31 +113,31 @@ namespace Nodify
     {
         #region Dependency Properties
 
-        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(nameof(Source), typeof(Point), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.Point, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty TargetProperty = DependencyProperty.Register(nameof(Target), typeof(Point), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.Point, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty SourceOffsetProperty = DependencyProperty.Register(nameof(SourceOffset), typeof(Size), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.ConnectionOffset, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty TargetOffsetProperty = DependencyProperty.Register(nameof(TargetOffset), typeof(Size), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.ConnectionOffset, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty SourceOffsetModeProperty = DependencyProperty.Register(nameof(SourceOffsetMode), typeof(ConnectionOffsetMode), typeof(BaseConnection), new FrameworkPropertyMetadata(ConnectionOffsetMode.Static, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty TargetOffsetModeProperty = DependencyProperty.Register(nameof(TargetOffsetMode), typeof(ConnectionOffsetMode), typeof(BaseConnection), new FrameworkPropertyMetadata(ConnectionOffsetMode.Static, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty SourceOrientationProperty = DependencyProperty.Register(nameof(SourceOrientation), typeof(Orientation), typeof(BaseConnection), new FrameworkPropertyMetadata(Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty TargetOrientationProperty = DependencyProperty.Register(nameof(TargetOrientation), typeof(Orientation), typeof(BaseConnection), new FrameworkPropertyMetadata(Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty DirectionProperty = DependencyProperty.Register(nameof(Direction), typeof(ConnectionDirection), typeof(BaseConnection), new FrameworkPropertyMetadata(default(ConnectionDirection), FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty DirectionalArrowsCountProperty = DependencyProperty.Register(nameof(DirectionalArrowsCount), typeof(uint), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.UInt0, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty DirectionalArrowsOffsetProperty = DependencyProperty.Register(nameof(DirectionalArrowsOffset), typeof(double), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.Double0, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty IsAnimatingDirectionalArrowsProperty = DependencyProperty.Register(nameof(IsAnimatingDirectionalArrows), typeof(bool), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.False, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OnIsAnimatingDirectionalArrowsChanged)));
-        public static readonly DependencyProperty DirectionalArrowsAnimationDurationProperty = DependencyProperty.Register(nameof(DirectionalArrowsAnimationDuration), typeof(double), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.Double2, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OnDirectionalArrowsAnimationDurationChanged)));
-        public static readonly DependencyProperty SpacingProperty = DependencyProperty.Register(nameof(Spacing), typeof(double), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.Double0, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty ArrowSizeProperty = DependencyProperty.Register(nameof(ArrowSize), typeof(Size), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.ArrowSize, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty ArrowEndsProperty = DependencyProperty.Register(nameof(ArrowEnds), typeof(ArrowHeadEnds), typeof(BaseConnection), new FrameworkPropertyMetadata(ArrowHeadEnds.End, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty ArrowShapeProperty = DependencyProperty.Register(nameof(ArrowShape), typeof(ArrowHeadShape), typeof(BaseConnection), new FrameworkPropertyMetadata(ArrowHeadShape.Arrowhead, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty SourceProperty = DependencyProperty.Register(nameof(Source), typeof(Point), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.Point, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty TargetProperty = DependencyProperty.Register(nameof(Target), typeof(Point), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.Point, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty SourceOffsetProperty = DependencyProperty.Register(nameof(SourceOffset), typeof(Size), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.ConnectionOffset, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty TargetOffsetProperty = DependencyProperty.Register(nameof(TargetOffset), typeof(Size), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.ConnectionOffset, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty SourceOffsetModeProperty = DependencyProperty.Register(nameof(SourceOffsetMode), typeof(ConnectionOffsetMode), typeof(BaseConnection), new FrameworkPropertyMetadata(ConnectionOffsetMode.Static, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty TargetOffsetModeProperty = DependencyProperty.Register(nameof(TargetOffsetMode), typeof(ConnectionOffsetMode), typeof(BaseConnection), new FrameworkPropertyMetadata(ConnectionOffsetMode.Static, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty SourceOrientationProperty = DependencyProperty.Register(nameof(SourceOrientation), typeof(Orientation), typeof(BaseConnection), new FrameworkPropertyMetadata(Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty TargetOrientationProperty = DependencyProperty.Register(nameof(TargetOrientation), typeof(Orientation), typeof(BaseConnection), new FrameworkPropertyMetadata(Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty DirectionProperty = DependencyProperty.Register(nameof(Direction), typeof(ConnectionDirection), typeof(BaseConnection), new FrameworkPropertyMetadata(default(ConnectionDirection), FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty DirectionalArrowsCountProperty = DependencyProperty.Register(nameof(DirectionalArrowsCount), typeof(uint), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.UInt0, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty DirectionalArrowsOffsetProperty = DependencyProperty.Register(nameof(DirectionalArrowsOffset), typeof(double), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.Double0, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty IsAnimatingDirectionalArrowsProperty = DependencyProperty.Register(nameof(IsAnimatingDirectionalArrows), typeof(bool), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.False, FrameworkPropertyMetadataOptions.None, new PropertyChangedCallback(OnIsAnimatingDirectionalArrowsChanged)));
+        public static readonly DependencyProperty DirectionalArrowsAnimationDurationProperty = DependencyProperty.Register(nameof(DirectionalArrowsAnimationDuration), typeof(double), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.Double2, FrameworkPropertyMetadataOptions.None, new PropertyChangedCallback(OnDirectionalArrowsAnimationDurationChanged)));
+        public static readonly DependencyProperty SpacingProperty = DependencyProperty.Register(nameof(Spacing), typeof(double), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.Double0, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty ArrowSizeProperty = DependencyProperty.Register(nameof(ArrowSize), typeof(Size), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.ArrowSize, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty ArrowEndsProperty = DependencyProperty.Register(nameof(ArrowEnds), typeof(ArrowHeadEnds), typeof(BaseConnection), new FrameworkPropertyMetadata(ArrowHeadEnds.End, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty ArrowShapeProperty = DependencyProperty.Register(nameof(ArrowShape), typeof(ArrowHeadShape), typeof(BaseConnection), new FrameworkPropertyMetadata(ArrowHeadShape.Arrowhead, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
         public static readonly DependencyProperty SplitCommandProperty = DependencyProperty.Register(nameof(SplitCommand), typeof(ICommand), typeof(BaseConnection));
         public static readonly DependencyProperty DisconnectCommandProperty = Connector.DisconnectCommandProperty.AddOwner(typeof(BaseConnection));
         public static readonly DependencyProperty OutlineThicknessProperty = DependencyProperty.Register(nameof(OutlineThickness), typeof(double), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.Double5, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OnOutlinePenChanged)));
         public static readonly DependencyProperty OutlineBrushProperty = DependencyProperty.Register(nameof(OutlineBrush), typeof(Brush), typeof(BaseConnection), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.AffectsRender, new PropertyChangedCallback(OnOutlinePenChanged)));
-        public static readonly DependencyProperty FocusVisualPenProperty = DependencyProperty.Register(nameof(FocusVisualPen), typeof(Pen), typeof(BaseConnection), new FrameworkPropertyMetadata(DefaultFocusVisualPen, FrameworkPropertyMetadataOptions.AffectsRender));
-        public static readonly DependencyProperty FocusVisualPaddingProperty = DependencyProperty.Register(nameof(FocusVisualPadding), typeof(double), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.Double1, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty FocusVisualPenProperty = DependencyProperty.Register(nameof(FocusVisualPen), typeof(Pen), typeof(BaseConnection), new FrameworkPropertyMetadata(DefaultFocusVisualPen, FrameworkPropertyMetadataOptions.None));
+        public static readonly DependencyProperty FocusVisualPaddingProperty = DependencyProperty.Register(nameof(FocusVisualPadding), typeof(double), typeof(BaseConnection), new FrameworkPropertyMetadata(BoxValue.Double1, FrameworkPropertyMetadataOptions.None));
         public static readonly DependencyProperty ForegroundProperty = TextBlock.ForegroundProperty.AddOwner(typeof(BaseConnection));
-        public static readonly DependencyProperty TextProperty = TextBlock.TextProperty.AddOwner(typeof(BaseConnection), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.AffectsRender));
+        public static readonly DependencyProperty TextProperty = TextBlock.TextProperty.AddOwner(typeof(BaseConnection), new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender));
         public static readonly DependencyProperty FontSizeProperty = TextElement.FontSizeProperty.AddOwner(typeof(BaseConnection));
         public static readonly DependencyProperty FontFamilyProperty = TextElement.FontFamilyProperty.AddOwner(typeof(BaseConnection));
         public static readonly DependencyProperty FontWeightProperty = TextElement.FontWeightProperty.AddOwner(typeof(BaseConnection));
@@ -553,19 +553,9 @@ namespace Nodify
             FillRule = FillRule.EvenOdd
         };
 
-        // Geometry caching heuristic:
-        // 0: Invalid (any reason)
-        // 1: Invalidated by MeasureOverride
-        // --
-        // 2: Valid until the next call to MeasureOverride, not yet used by OnRender
-        // 3: Valid, update triggered by MeasureOverride, not yet used by OnRender
-        // 4: Valid, already used by OnRender
-        // Do note that this can still be improved, as we still regenerate geometries more than necessary.
-        // From a quick test using the playground benchmark, there were about 59,4% of calls that can return a cached geometry.
-        // A further improvement would be to remove the OnRender heuristic and properly track properties which can actually change the geometry.
-        // Example of a scenario currently triggering an unnecessary update:
-        // A connection hovered in the playground will change its OutlineBrush, which will call OnRender and then invalidate the geometry.
-        private int _geometryCacheStatus;
+        // Geometry caching heuristic.
+        // Geometry is generated on demand the first time, and regenerated each time MeasureOverride is called.
+        private bool _isGeometryValid;
 
         private ConnectionContainer? _container;
         private ConnectionContainer? Container => _container ??= this.GetParentOfType<ConnectionContainer>();
@@ -574,7 +564,7 @@ namespace Nodify
         {
             get
             {
-                if (_geometryCacheStatus <= 1)
+                if (!_isGeometryValid)
                 {
                     using (StreamGeometryContext context = _geometry.Open())
                     {
@@ -608,7 +598,7 @@ namespace Nodify
                         }
                     }
 
-                    _geometryCacheStatus += 2;
+                    _isGeometryValid = true;
                 }
 
                 return _geometry;
@@ -981,17 +971,12 @@ namespace Nodify
             // We always want to update the geometry when MeasureOverride is called.
             // The base implementation will actually call the internal method CacheDefiningGeometry() here,
             // which we sadly can't override. However, we can mimick the logic.
-            _geometryCacheStatus = 1;
+            _isGeometryValid = false;
             return base.MeasureOverride(constraint);
         }
 
         protected override void OnRender(DrawingContext drawingContext)
         {
-            // Properties declared with AffectsRender should trigger calls to the OnRender method without
-            // going though the arrange/measure logic, so we want to consider two consecutive calls as a hint
-            // that the geometry needs to be recalculated.
-            if (_geometryCacheStatus == 4) _geometryCacheStatus = 0;
-
             if (OutlineBrush != null)
             {
                 drawingContext.DrawGeometry(OutlineBrush, GetOutlinePen(), DefiningGeometry);
@@ -1008,8 +993,6 @@ namespace Nodify
                 (Vector sourceOffset, Vector targetOffset) = GetOffset();
                 drawingContext.DrawText(text, GetTextPosition(text, Source + sourceOffset, Target + targetOffset));
             }
-
-            _geometryCacheStatus = 4;
         }
 
         internal void UpdateFocusVisual()

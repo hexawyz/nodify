@@ -15,8 +15,8 @@ namespace Nodify
 
     public class StepConnection : LineConnection
     {
-        public static readonly DependencyProperty SourcePositionProperty = DependencyProperty.Register(nameof(SourcePosition), typeof(ConnectorPosition), typeof(StepConnection), new FrameworkPropertyMetadata(ConnectorPosition.Right, FrameworkPropertyMetadataOptions.AffectsRender, OnConnectorPositionChanged));
-        public static readonly DependencyProperty TargetPositionProperty = DependencyProperty.Register(nameof(TargetPosition), typeof(ConnectorPosition), typeof(StepConnection), new FrameworkPropertyMetadata(ConnectorPosition.Left, FrameworkPropertyMetadataOptions.AffectsRender, OnConnectorPositionChanged));
+        public static readonly DependencyProperty SourcePositionProperty = DependencyProperty.Register(nameof(SourcePosition), typeof(ConnectorPosition), typeof(StepConnection), new FrameworkPropertyMetadata(ConnectorPosition.Right, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender, OnConnectorPositionChanged));
+        public static readonly DependencyProperty TargetPositionProperty = DependencyProperty.Register(nameof(TargetPosition), typeof(ConnectorPosition), typeof(StepConnection), new FrameworkPropertyMetadata(ConnectorPosition.Left, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender, OnConnectorPositionChanged));
 
         private static void OnConnectorPositionChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -28,9 +28,9 @@ namespace Nodify
 
         static StepConnection()
         {
-            SourceOrientationProperty.OverrideMetadata(typeof(StepConnection), new FrameworkPropertyMetadata(Orientation.Horizontal, null, CoerceSourceOrientation));
-            TargetOrientationProperty.OverrideMetadata(typeof(StepConnection), new FrameworkPropertyMetadata(Orientation.Horizontal, null, CoerceTargetOrientation));
-            DirectionProperty.OverrideMetadata(typeof(StepConnection), new FrameworkPropertyMetadata(ConnectionDirection.Forward, null, CoerceConnectionDirection));
+            SourceOrientationProperty.OverrideMetadata(typeof(StepConnection), new FrameworkPropertyMetadata(Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender, null, CoerceSourceOrientation));
+            TargetOrientationProperty.OverrideMetadata(typeof(StepConnection), new FrameworkPropertyMetadata(Orientation.Horizontal, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender, null, CoerceTargetOrientation));
+            DirectionProperty.OverrideMetadata(typeof(StepConnection), new FrameworkPropertyMetadata(ConnectionDirection.Forward, FrameworkPropertyMetadataOptions.AffectsMeasure | FrameworkPropertyMetadataOptions.AffectsRender, null, CoerceConnectionDirection));
             NodifyEditor.CuttingConnectionTypes.Add(typeof(StepConnection));
         }
 
